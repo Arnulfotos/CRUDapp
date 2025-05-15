@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRUDapp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,9 @@ namespace CRUDapp
             Console.WriteLine(c.CategoryName);
             Console.ReadLine();*/
 
-            var list = Category.GetAll();
+            var list = Suppliers.GetAll();
             foreach (var item in list) {
-                Console.WriteLine(item.CategoryName);
+                Console.WriteLine(item.City);
             
             }
             Console.ReadLine();
