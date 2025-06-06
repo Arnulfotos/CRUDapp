@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRUDapp.Models
 {
-    public class Suppliers
+    public class Supplier
     {
         #region Attributes
 
@@ -41,12 +41,12 @@ namespace CRUDapp.Models
 
 
 
-        public Suppliers()
+        public Supplier()
         {
         }
 
         // Constructor con parámetros
-        public Suppliers(int supplierID, string companyName, string contactTitle, string address,
+        public Supplier(int supplierID, string companyName, string contactTitle, string address,
                          string city, string region, string postalCode, string country,
                          string phone, string fax, string homePage)
         {
@@ -63,14 +63,45 @@ namespace CRUDapp.Models
             _homePage = homePage;
         }
 
+        public Supplier(int id)
+        {
+            string query = @"
+        SELECT SupplierID, CompanyName, ContactTitle, Address, City, Region, 
+               PostalCode, Country, Phone, Fax, HomePage 
+        FROM Suppliers 
+        WHERE SupplierID = @ID";
+
+            SqlCommand command = new SqlCommand(query);
+            command.Parameters.AddWithValue("@ID", id);
+
+            DataTable table = SQLServerConnection.ExecuteQuery(command);
+
+            if (table.Rows.Count > 0)
+            {
+                DataRow row = table.Rows[0];
+
+                _supplierID = Convert.ToInt32(row["SupplierID"]);
+                _companyName = Convert.ToString(row["CompanyName"]);
+                _contactTitle = Convert.ToString(row["ContactTitle"]);
+                _address = Convert.ToString(row["Address"]);
+                _city = Convert.ToString(row["City"]);
+                _region = Convert.ToString(row["Region"]);
+                _postalCode = Convert.ToString(row["PostalCode"]);
+                _country = Convert.ToString(row["Country"]);
+                _phone = Convert.ToString(row["Phone"]);
+                _fax = Convert.ToString(row["Fax"]);
+                _homePage = Convert.ToString(row["HomePage"]);
+            }
+        }
 
 
 
 
-        public static List<Suppliers> GetAll()
+
+        public static List<Supplier> GetAll()
         {
 
-            List<Suppliers> list = new List<Suppliers>();
+            List<Supplier> list = new List<Supplier>();
 
             string query = @"SELECT * FROM Suppliers Order By City";
             SqlCommand command = new SqlCommand(query);
@@ -81,7 +112,7 @@ namespace CRUDapp.Models
                 foreach (DataRow row in table.Rows)
                 {
 
-                    list.Add(new Suppliers(
+                    list.Add(new Supplier(
     Convert.ToInt32(row["SupplierID"]),
     Convert.ToString(row["CompanyName"]),
     Convert.ToString(row["ContactTitle"]),
